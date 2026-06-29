@@ -1,0 +1,155 @@
+# Spring Boot Expense Tracker API
+
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.X-brightgreen.svg)
+![Java](https://img.shields.io/badge/Java-17-orange.svg)
+![MySQL](https://img.shields.io/badge/MySQL-8.X-blue.svg)
+![Hibernate](https://img.shields.io/badge/Hibernate-JPA-blueviolet.svg)
+
+A production-ready RESTful API for managing users and their expenses. This project demonstrates core backend engineering principles including database relationship mapping, data validation, centralized exception handling, SLF4J logging, pagination, and sorting.
+
+---
+
+## 🚀 Key Features
+
+*   **User & Expense Management**: Full CRUD operations for Users and Expenses.
+*   **Relational Database Mapping**: Bidirectional `@OneToMany` / `@ManyToOne` relationship between User and Expense entities.
+*   **Cascading & Orphan Removal**: Automatically cleans up linked expenses when a user is deleted or an expense is detached.
+*   **DTO (Data Transfer Object) Pattern**: Strict separation of concerns between database entities and HTTP request/response payloads to prevent data leakage.
+*   **Pagination & Sorting**: Efficiently retrieve large datasets using Spring Data JPA's `Pageable` and `Sort` interfaces (e.g., `?page=0&size=5&sortBy=amount&direction=desc`).
+*   **Global Exception Handling**: Centralized error management using `@RestControllerAdvice` for clean, consistent HTTP responses (e.g., handling 400 Bad Request for validation failures and 404 Not Found).
+*   **JSR-380 Validation**: Strong input validation at the controller layer (`@NotBlank`, `@Positive`).
+*   **Production-Standard Logging**: SLF4J + Logback implementation with appropriate log levels (`INFO`, `WARN`, `ERROR`) across all service and exception layers.
+
+---
+
+## 🛠️ Tech Stack
+
+*   **Language**: Java 17
+*   **Framework**: Spring Boot 3.x
+*   **Database**: MySQL 8.0+
+*   **ORM**: Spring Data JPA (Hibernate)
+*   **Build Tool**: Maven
+*   **Boilerplate Reduction**: Lombok
+*   **API Testing**: Postman
+
+---
+
+## 🏗️ Architecture & Workflow
+
+The application follows a classic 3-tier layered architecture, keeping controllers thin and delegating business logic to the service layer.
+
+1.  **Controller Layer**: Handles HTTP requests, triggers input validation, and delegates to the Service layer. Returns `ResponseEntity` with DTOs.
+2.  **Service Layer**: Contains business logic, entity-to-DTO mapping, and SLF4J logging.
+3.  **Repository Layer**: Spring Data JPA interfaces handling direct database interactions.
+
+### 📂 Folder Structure
+
+```
+src/main/java/com/pranav/expense_tracker/
+├── controller/         # REST API Endpoints (Thin controllers)
+├── dto/
+│   ├── request/        # Incoming payloads (e.g., CreateUserRequest)
+│   └── response/       # Outgoing payloads (e.g., UserResponse)
+├── entity/             # JPA Entities (User, Expense)
+├── exception/          # Custom Exceptions & GlobalExceptionHandler
+├── mapper/             # Entity <-> DTO Conversion logic
+├── repositry/          # Spring Data JPA Repositories
+└── service/            # Core Business Logic & SLF4J Logging
+```
+
+---
+
+## 🔌 API Endpoints
+
+### User Endpoints (`/users`)
+| Method | Endpoint | Description | Query Params |
+|--------|----------|-------------|--------------|
+| `POST` | `/users` | Create a new user | |
+| `GET` | `/users` | Get all users (Paginated) | `?page=0&size=10&sortBy=id&direction=asc` |
+| `GET` | `/users/{id}` | Get user by ID | |
+| `GET` | `/users/search` | Find user by email | `?email=test@example.com` |
+| `PUT` | `/users/{id}` | Update user details | |
+| `DELETE`| `/users/{id}` | Delete a user (Cascades to expenses) | |
+
+### Relationship Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/users/{userId}/expenses` | Create an expense linked to a specific user |
+| `GET` | `/users/{userId}/expenses` | Get all expenses belonging to a specific user |
+
+### Expense Endpoints (`/expenses`)
+| Method | Endpoint | Description | Query Params |
+|--------|----------|-------------|--------------|
+| `POST` | `/expenses` | Create an independent expense | |
+| `GET` | `/expenses` | Get all expenses (Paginated) | `?page=0&size=10&sortBy=amount&direction=desc` |
+| `GET` | `/expenses/{id}` | Get expense by ID | |
+| `GET` | `/expenses/search` | Find expenses by category | `?category=Food` |
+| `PUT` | `/expenses/{id}` | Update expense details | |
+| `DELETE`| `/expenses/{id}` | Delete an expense | |
+
+---
+
+## 💾 Database Schema
+
+The database relies on two main tables with a one-to-many relationship:
+
+*   **`users`**: `id` (PK), `name`, `email`
+*   **`expenses`**: `id` (PK), `amount`, `title`, `category`, `user_id` (FK to `users.id`)
+
+*(A visual schema diagram placeholder - insert image here)*
+
+---
+
+## ⚙️ Configuration & Installation
+
+### Prerequisites
+*   JDK 17+
+*   Maven 3.6+
+*   MySQL Server 8.0+
+
+### Database Setup
+1. Create a MySQL database:
+   ```sql
+   CREATE DATABASE expense_tracker_db;
+   ```
+2. The tables will be auto-generated by Hibernate (`ddl-auto=update` is configured).
+
+### Clone & Run
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/expense-tracker.git
+cd expense-tracker
+
+# 2. Set environment variables for DB credentials (or update src/main/resources/application.properties)
+export DB_URL=jdbc:mysql://localhost:3306/expense_tracker_db
+export DB_USERNAME=root
+export DB_PASSWORD=your_password
+
+# 3. Build the project
+./mvnw clean install
+
+# 4. Run the application
+./mvnw spring-boot:run
+```
+The server will start on `http://localhost:8080`.
+
+---
+
+## 🔮 Future Improvements / Learning Outcomes
+
+*   **Security**: Implement Spring Security & JWT Authentication for user isolation.
+*   **Documentation**: Integrate Swagger/OpenAPI for automated interactive API docs.
+*   **Testing**: Add comprehensive Unit and Integration tests using JUnit & Mockito.
+*   **Soft Deletes**: Implement soft-delete logic instead of hard-deleting records to maintain historical data.
+
+### 📚 What I Learned
+Through this project, I deepened my understanding of how enterprise Spring Boot applications are structured. Specifically, mastering the DTO pattern improved my API's security, and implementing centralized exception handling taught me how to deliver a consistent client experience. Configuring JPA relationships (cascade and orphan removal) gave me practical experience in relational database integrity.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+*Developed by Pranav*
