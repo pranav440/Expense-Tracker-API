@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 @RequestMapping("/users")
 public class UserController{
 

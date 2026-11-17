@@ -1,11 +1,13 @@
-# Spring Boot Expense Tracker API
+# Expense Tracker — Full-Stack Application
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.X-brightgreen.svg)
 ![Java](https://img.shields.io/badge/Java-17-orange.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8.X-blue.svg)
-![Hibernate](https://img.shields.io/badge/Hibernate-JPA-blueviolet.svg)
+![React](https://img.shields.io/badge/React-18-61DAFB.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF.svg)
 
-A production-ready RESTful API for managing users and their expenses. This project demonstrates core backend engineering principles including database relationship mapping, data validation, centralized exception handling, SLF4J logging, pagination, and sorting.
+A production-ready full-stack application featuring a Spring Boot REST API and a modern React + TypeScript dashboard for tracking and analyzing personal expenses.
 
 ---
 

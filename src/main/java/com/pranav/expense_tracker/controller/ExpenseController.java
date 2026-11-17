@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/expenses")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ExpenseController {
 
